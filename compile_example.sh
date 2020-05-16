@@ -1,18 +1,15 @@
-rm -f example.o
-rm -f example.nes
-rm -f example.map
-rm -f example.labels
-rm -f example.nes.ram.nl
-rm -f example.nes.0.nl
-rm -f example.nes.1.nl
-rm -f example.nes.dbg
+rm -fr generated
+rm -f debug
 
 echo -e "\nCompiling..."
 
-ca65 example.s -g -o example.o
+mkdir -p generated
+ca65 src/example.s -g -o generated/example.o
 
 echo -e "\nLinking..."
-ld65 -o example.nes -C example.cfg example.o -m example.map -Ln example.labels --dbgfile example.nes.dbg
+
+mkdir -p debug
+ld65 -o example.nes -C src/example.cfg generated/example.o -m generated/example.map -Ln generated/example.labels --dbgfile debug/example.nes.dbg
 
 echo -e "\nGenerating FCEUX debug symbols..."
 python3 example_fceux_symbols.py
